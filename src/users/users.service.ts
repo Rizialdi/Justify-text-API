@@ -10,7 +10,7 @@ export class UsersService {
 
   async create(
     data: Prisma.UserCreateInput
-  ): Promise<{ token: string; user: User }> {
+  ): Promise<{ token: string; user: any }> {
     const user = await this.prisma.user.create({
       data,
     });
@@ -28,7 +28,17 @@ export class UsersService {
   }
 
   async findOne(email: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    return user;
+  }
+
+  async findOneWithId(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
 
     return user;
   }
