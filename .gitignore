@@ -9,15 +9,3 @@ prisma/migrations/**/*
 .DS_Store
 dist/**/*
 dist
-dist/app.controller.d.ts
-dist/app.controller.js
-dist/app.controller.js.map
-dist/app.module.js
-dist/app.module.js.map
-dist/tsconfig.build.tsbuildinfo
-dist/app.controller.d.ts
-dist/app.controller.js
-dist/app.controller.js.map
-dist/app.module.js
-dist/app.module.js.map
-dist/tsconfig.build.tsbuildinfo

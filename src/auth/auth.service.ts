@@ -1,13 +1,16 @@
+import { genSalt, hash } from 'bcrypt';
+
+import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '.prisma/client';
 import { UsersService } from '../users/users.service';
-import { hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly prisma: PrismaService
@@ -37,7 +40,12 @@ export class AuthService {
   }> {
     const { email, password: userPassword } = data;
 
-    const saltOrRounds = 10;
+    const saltOrRounds = parseInt(
+      this.configService.get<string>('APP_SECRET_CODE')
+    );
+
+    console.log(saltOrRounds);
+
     const hashedPassword = await hash(userPassword, saltOrRounds);
 
     const user = await this.prisma.user.create({
