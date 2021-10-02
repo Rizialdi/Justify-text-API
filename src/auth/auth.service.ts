@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '.prisma/client';
 import { UsersService } from '../users/users.service';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -30,12 +31,21 @@ export class AuthService {
     };
   }
 
-  async signUp(data): Promise<{
+  async signUp(data: { email: string; password: string }): Promise<{
     user: { id: string; email: string; name?: string };
     access_token: string;
   }> {
+    const { email, password: userPassword } = data;
+
+    const saltOrRounds = 10;
+    const hashedPassword = await hash(userPassword, saltOrRounds);
+
     const user = await this.prisma.user.create({
-      data,
+      data: {
+        email,
+        password: hashedPassword,
+        wordCounter: { create: { wordCount: 0 } },
+      },
     });
 
     const payload = { username: user.name, sub: user.email };
