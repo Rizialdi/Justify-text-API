@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { UsersService } from 'src/users/users.service';
 import { readPost } from 'src/utils';
 
 import { JustifyService } from './justify.service';

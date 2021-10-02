@@ -1,4 +1,4 @@
-import { genSalt, hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
@@ -16,9 +16,10 @@ export class AuthService {
     private readonly prisma: PrismaService
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.usersService.findOne(email);
+
+    if (user && (await compare(pass, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
@@ -26,7 +27,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async getUserToken(user: User) {
     const payload = { username: user.name, sub: user.email };
 
     return {
@@ -34,14 +35,14 @@ export class AuthService {
     };
   }
 
-  async signUp(data: { email: string; password: string }): Promise<{
+  async registerUser(data: { email: string; password: string }): Promise<{
     user: { id: string; email: string; name?: string };
     access_token: string;
   }> {
     const { email, password: userPassword } = data;
 
     const saltOrRounds = parseInt(
-      this.configService.get<string>('APP_SECRET_CODE')
+      this.configService.get<string>('HASH_PASSWORD')
     );
 
     console.log(saltOrRounds);
