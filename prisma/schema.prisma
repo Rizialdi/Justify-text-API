@@ -11,17 +11,17 @@ generator client {
 }
 
 model User {
-  id          String        @id @default(cuid())
-  email       String        @unique
+  id          String       @id @default(cuid())
+  email       String       @unique
   name        String?
   password    String
-  WordCounter WordCounter[]
+  wordCounter WordCounter?
 }
 
 model WordCounter {
   id               String   @id @default(cuid())
   wordCount        Int      @default(0)
   lastestQueryDate DateTime @default(now())
-  author           User?    @relation(fields: [authorId], references: [id])
-  authorId         String?
+  author           User     @relation(fields: [authorId], references: [id])
+  authorId         String
 }
