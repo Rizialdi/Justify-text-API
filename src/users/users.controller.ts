@@ -1,42 +1,28 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body, Request, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Prisma } from '@prisma/client';
+import { User } from '@prisma/client';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() data: Prisma.UserCreateInput) {
-    return this.usersService.create(data);
+  @Put('updatename')
+  updateName(@Request() req: { user: User }, @Body() body: { name: string }) {
+    return this.usersService.updateName(req.user.email, body.name);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Put('updatepassword')
+  updatePassword(
+    @Request() req: { user: User },
+    @Body() body: { password: string }
+  ) {
+    return this.usersService.updatePassword(req.user.email, body.password);
   }
 
-  @Get(':id')
-  findOne(@Param('id') email: string) {
-    return this.usersService.findOne(email);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Get('me')
+  findOne(@Request() req: { user: User }) {
+    return this.usersService.findMe(req.user.email);
   }
 }

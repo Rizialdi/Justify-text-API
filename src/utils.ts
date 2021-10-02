@@ -1,4 +1,6 @@
 import { IncomingMessage } from 'http';
+import { User } from '@prisma/client';
+import { hash } from 'bcrypt';
 
 const sentencesDividerAndSpaceFiller = (
   text: string,
@@ -42,4 +44,20 @@ export const readPost = (req: IncomingMessage) => {
     req.on('error', (error: unknown) => reject(error));
     req.on('end', () => resolve(body));
   });
+};
+
+export const generateHashFromPassword = async (
+  password: string,
+  saltOrRounds: number
+): Promise<string> => {
+  const hashedPassword = await hash(password, saltOrRounds);
+
+  return hashedPassword;
+};
+
+export const removeSensibleInfos = (user: User) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, ...result } = user;
+
+  return result;
 };
