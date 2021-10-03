@@ -1,6 +1,5 @@
 import { User } from '.prisma/client';
 import {
-  Body,
   Controller,
   Header,
   HttpException,

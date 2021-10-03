@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UserEntity {
+export class UnauthorizedResponseEntity {
   @ApiProperty()
-  email: string;
+  statusCode: number;
 
   @ApiProperty()
-  name: string;
+  message: string;
 }

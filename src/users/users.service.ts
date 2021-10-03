@@ -49,6 +49,27 @@ export class UsersService {
     return removeSensibleInfos(user);
   }
 
+  async userCredits(userEmail: string) {
+    const data = await this.prisma.user.findUnique({
+      where: { email: userEmail },
+      include: { wordCounter: true },
+    });
+
+    const {
+      email,
+      name,
+      wordCounter: { lastestQueryDate, wordCount },
+    } = data;
+
+    return {
+      email,
+      name,
+      'lastest query date': new Date(lastestQueryDate),
+      'processed words today': wordCount,
+      'remaining words today': 80000 - wordCount,
+    };
+  }
+
   updateName = async (email: string, name: string) => {
     const user = await this.prisma.user.update({
       data: { name },
@@ -59,10 +80,6 @@ export class UsersService {
   };
 
   updatePassword = async (email: string, password: string) => {
-    const saltOrRounds = parseInt(
-      this.configService.get<string>('HASH_PASSWORD')
-    );
-
     const hashedPassword = await generateHashFromPassword(password, 10);
 
     const user = await this.prisma.user.update({
