@@ -36,16 +36,6 @@ export const processTextGivenMaxLength = (text: string, maxLength: number) => {
   return processedArray?.join('\n');
 };
 
-export const readPost = (req: IncomingMessage) => {
-  // original -> https://stackoverflow.com/a/67892455
-  return new Promise<string>((resolve, reject) => {
-    let body = '';
-    req.on('data', (data: string) => (body += data));
-    req.on('error', (error: unknown) => reject(error));
-    req.on('end', () => resolve(body));
-  });
-};
-
 export const generateHashFromPassword = async (
   password: string,
   saltOrRounds: number
