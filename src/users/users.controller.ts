@@ -5,7 +5,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import {
   ApiBearerAuth,
   ApiOkResponse,
-  ApiParam,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';

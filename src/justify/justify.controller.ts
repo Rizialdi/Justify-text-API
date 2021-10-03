@@ -18,7 +18,6 @@ import {
 import { IncomingMessage } from 'http';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PlainBody } from './decorators/PlainBody.decorator';
-import { PlainBodyDto } from './dto/plainbody.dto';
 import { PaymentRequiredResponseEntity } from './entities/paymentRequired.entity';
 import { UnauthorizedResponseEntity } from './entities/unauthorized.entity';
 
@@ -50,7 +49,7 @@ export class JustifyController {
   })
   async getTextJustified(
     @Request() req: IncomingMessage & { user: User },
-    @PlainBody() text: PlainBodyDto
+    @PlainBody() text: string
   ) {
     const currentTextTotalWordCount = text.split(' ').length;
 

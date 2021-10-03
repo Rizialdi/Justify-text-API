@@ -33,8 +33,14 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('registerUser')
-  @ApiCreatedResponse({ type: UserEntity })
-  @ApiForbiddenResponse({ type: ForbiddenResponseEntity })
+  @ApiCreatedResponse({
+    type: UserEntity,
+    description: 'Register to use the service.',
+  })
+  @ApiForbiddenResponse({
+    type: ForbiddenResponseEntity,
+    description: 'Usually come from trying to use an already registered email.',
+  })
   @ApiBadRequestResponse({ type: BadRequestResponseEntity })
   registerUser(@Body() body: CreateUserDto): Promise<UserEntity> {
     return this.authService.registerUser(body);
@@ -43,14 +49,22 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('getUserToken')
   @ApiCreatedResponse({ type: GetTokenEntity })
-  @ApiUnauthorizedResponse({ type: ForbiddenResponseEntity })
+  @ApiUnauthorizedResponse({
+    type: ForbiddenResponseEntity,
+    description:
+      'Right credentials where not given during the request.\n Set your token at the top of the file.',
+  })
   async login(@Request() req, @Body() _: GetTokenDto) {
     return this.authService.getUserToken(req.user);
   }
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOkResponse({ type: ProfileEntity })
+  @ApiOkResponse({
+    type: ProfileEntity,
+    description:
+      'Get your email and name with one click. Be sure to be authenticated',
+  })
   @ApiUnauthorizedResponse({ type: ForbiddenResponseEntity })
   @Get('profile')
   getProfile(@Request() req) {
