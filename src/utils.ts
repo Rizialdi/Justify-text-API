@@ -1,6 +1,36 @@
-import { IncomingMessage } from 'http';
 import { User } from '@prisma/client';
 import { hash } from 'bcrypt';
+
+export const generateHashFromPassword = async (
+  password: string,
+  saltOrRounds: number
+): Promise<string> => {
+  const hashedPassword = await hash(password, saltOrRounds);
+
+  return hashedPassword;
+};
+
+export const processTextGivenMaxLength = (text: string, maxLength = 80) => {
+  const processedArray = sentencesDividerAndSpaceFiller(text, maxLength);
+
+  return processedArray?.join('\n');
+};
+
+const addSpaces = (textLine: string, maxLength = 80): string => {
+  let line = textLine.trim();
+  let j = 1;
+
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] == ' ' && line.length < maxLength) {
+      line = line.substring(0, i) + '  ' + line.substring(i + 1);
+      i = i + j;
+    } else if (i == line.length - 1 && line.length < maxLength) {
+      i = 0;
+      j++;
+    }
+  }
+  return line;
+};
 
 const sentencesDividerAndSpaceFiller = (
   text: string,
@@ -22,31 +52,12 @@ const sentencesDividerAndSpaceFiller = (
       // move on only if the word is processed
       processedWords++;
     } else if (condition > maxLength || processedWords !== wordsArray.length) {
-      localNewLinesArray.push(currentLine);
+      localNewLinesArray.push(addSpaces(currentLine));
       currentLine = '';
     }
   }
 
   return localNewLinesArray;
-};
-
-export const processTextGivenMaxLength = (text: string, maxLength: number) => {
-  const processedArray = sentencesDividerAndSpaceFiller(text, maxLength);
-  console.log('l', processedArray);
-  return processedArray?.join('\n');
-};
-
-export const generateHashFromPassword = async (
-  password: string,
-  saltOrRounds: number
-): Promise<string> => {
-  const hashedPassword = await hash(password, saltOrRounds);
-
-  return hashedPassword;
-};
-
-export const addSpace = () => {
-  return;
 };
 
 export const removeSensibleInfos = (user: User) => {
