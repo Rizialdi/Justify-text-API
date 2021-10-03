@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Justify text API')
     .setDescription(
-      'Justify text API is a service that help you organize and format your text.'
+      'Justify text API is a service that help you format and justify your text.'
     )
     .setVersion('1.0')
     .addBearerAuth({ type: 'http', name: 'Access token', scheme: 'Bearer' })
