@@ -21,10 +21,10 @@ const addSpaces = (textLine: string, maxLength = 80): string => {
   let j = 1;
 
   for (let i = 0; i < line.length; i++) {
-    if (line[i] == ' ' && line.length < maxLength) {
+    if (line[i] === ' ' && line.length < maxLength) {
       line = line.substring(0, i) + '  ' + line.substring(i + 1);
       i = i + j;
-    } else if (i == line.length - 1 && line.length < maxLength) {
+    } else if (i === line.length - 1 && line.length < maxLength) {
       i = 0;
       j++;
     }
@@ -40,20 +40,25 @@ const sentencesDividerAndSpaceFiller = (
   const localNewLinesArray = [];
 
   const wordsArray = text.trim().split(' ');
-  let processedWords = 0;
 
-  while (processedWords !== wordsArray.length) {
-    const currentWord = wordsArray[processedWords];
-    const condition = currentLine.length + currentWord.length;
-
-    if (condition <= maxLength) {
-      currentLine = currentLine.concat(`${currentWord} `);
-
-      // move on only if the word is processed
-      processedWords++;
-    } else if (condition > maxLength || processedWords !== wordsArray.length) {
+  for (
+    let processedWords = 0;
+    processedWords < wordsArray.length + 1;
+    processedWords++
+  ) {
+    if (!wordsArray.slice(processedWords).length) {
       localNewLinesArray.push(addSpaces(currentLine));
       currentLine = '';
+    } else {
+      const currentWord = wordsArray[processedWords];
+      const condition = currentLine.length + currentWord.length;
+
+      if (condition <= maxLength) {
+        currentLine = currentLine.concat(`${currentWord} `);
+      } else if (condition > maxLength) {
+        localNewLinesArray.push(addSpaces(currentLine));
+        currentLine = '';
+      }
     }
   }
 
