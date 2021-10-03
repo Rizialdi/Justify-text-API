@@ -45,6 +45,10 @@ export const generateHashFromPassword = async (
   return hashedPassword;
 };
 
+export const addSpace = () => {
+  return;
+};
+
 export const removeSensibleInfos = (user: User) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, password, ...result } = user;
