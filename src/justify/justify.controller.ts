@@ -1,26 +1,40 @@
 import { User } from '.prisma/client';
 import {
+  Body,
   Controller,
   Header,
+  HttpException,
   ImATeapotException,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiHeader,
+  ApiTags,
+} from '@nestjs/swagger';
 import { IncomingMessage } from 'http';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { readPost } from 'src/utils';
 
 import { JustifyService } from './justify.service';
 
+@ApiTags('Justify routes')
 @Controller('justify')
 export class JustifyController {
   constructor(private readonly justifyService: JustifyService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
+  @ApiBearerAuth()
   @Header('content-type', 'text/plain')
-  async getTextJustified(@Request() req: IncomingMessage & { user: User }) {
+  @ApiConsumes('text/plain', 'multipart/form-data')
+  async getTextJustified(
+    @Request() req: IncomingMessage & { user: User },
+    @Body() fg: { user: string }
+  ) {
     const text = await readPost(req);
     const currentTextTotalWordCount = text.split(' ').length;
 
@@ -31,7 +45,7 @@ export class JustifyController {
       );
 
     if (willUserExceedFreeLimit) {
-      throw new ImATeapotException();
+      throw new HttpException('Payment Required', 402);
     }
 
     return this.justifyService.justifyText(text);

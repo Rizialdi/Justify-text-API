@@ -1,9 +1,11 @@
 import { generateHashFromPassword, removeSensibleInfos } from 'src/utils';
 
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from './dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '@prisma/client';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,16 +14,19 @@ export class UsersService {
     private configService: ConfigService
   ) {}
 
-  async createUser(email: string, password: string): Promise<User> {
+  async createUser(data: CreateUserDto): Promise<UserEntity> {
+    const { email, name, password } = data;
+
     const user = await this.prisma.user.create({
       data: {
         email,
+        name: name ? name : null,
         password,
         wordCounter: { create: { wordCount: 0 } },
       },
     });
 
-    return user;
+    return removeSensibleInfos(user);
   }
 
   findAll() {

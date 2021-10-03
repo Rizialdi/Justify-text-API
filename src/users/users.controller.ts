@@ -2,7 +2,10 @@ import { Controller, Get, Body, Request, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
 
+@ApiTags('User routes')
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
@@ -12,7 +15,7 @@ export class UsersController {
   updateName(@Request() req: { user: User }, @Body() body: { name: string }) {
     return this.usersService.updateName(req.user.email, body.name);
   }
-
+  @ApiParam({ type: CreateUserDto, name: 'ert' })
   @Put('updatepassword')
   updatePassword(
     @Request() req: { user: User },

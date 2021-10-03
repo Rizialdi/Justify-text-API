@@ -1,7 +1,10 @@
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
 
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { EmailInUseException } from './exceptions/emailInUse.exception';
+import { GetTokenDto } from './dto/getToken.dto';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { User } from '.prisma/client';
@@ -35,23 +38,26 @@ export class AuthService {
     };
   }
 
-  async registerUser(data: { email: string; password: string }): Promise<{
+  async registerUser(data: CreateUserDto): Promise<{
     user: { id: string; email: string; name?: string };
     access_token: string;
   }> {
-    const { email, password: userPassword } = data;
+    const { email, name, password: userPassword } = data;
 
     const saltOrRounds = parseInt(
       this.configService.get<string>('HASH_PASSWORD')
     );
 
-    console.log(saltOrRounds);
-
     const hashedPassword = await hash(userPassword, saltOrRounds);
+
+    const isUserInDb = !!(await this.usersService.findOne(email));
+
+    if (isUserInDb) throw new EmailInUseException();
 
     const user = await this.prisma.user.create({
       data: {
         email,
+        name: name ? name : null,
         password: hashedPassword,
         wordCounter: { create: { wordCount: 0 } },
       },
