@@ -4,7 +4,7 @@
 datasource db {
   provider = "postgresql"
   // url      = env("DATABASE_URL")
-  url      = env("postgresql://postgres:justifyTextApi@justifytextapi.cnbx6dscbold.eu-west-3.rds.amazonaws.com:5432/mydb?schema=public")
+  url      = "postgresql://postgres:justifyTextApi@justifytextapi.cnbx6dscbold.eu-west-3.rds.amazonaws.com:5432/mydb?schema=public"
 }
 
 generator client {
