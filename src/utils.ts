@@ -39,7 +39,7 @@ const sentencesDividerAndSpaceFiller = (
   let currentLine = '';
   const localNewLinesArray = [];
 
-  const wordsArray = text.trim().split(' ');
+  const wordsArray = text.replace(/\s+/g, ' ').trim().split(' ');
 
   for (
     let processedWords = 0;
@@ -57,7 +57,7 @@ const sentencesDividerAndSpaceFiller = (
         currentLine = currentLine.concat(`${currentWord} `);
       } else if (condition > maxLength) {
         localNewLinesArray.push(addSpaces(currentLine));
-        currentLine = '';
+        currentLine = `${wordsArray[processedWords]} `;
       }
     }
   }
