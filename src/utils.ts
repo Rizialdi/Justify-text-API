@@ -65,7 +65,6 @@ const sentencesDividerAndSpaceFiller = (
       }
     }
     if (!text.slice(i + 1).length) {
-      tempText = addSpaces(tempText, maxLength);
       newtext += `${tempText} \n`;
       tempText = "";
     }
