@@ -63,10 +63,10 @@ Some routes have a **locker** on the right. To use those routes, you must first 
 - Paste that value in **Authorize** at the top of the file (See below). 
 - Enjoy the restricted routes. And do not hesitate to give any feedback.
 
-![First image](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fe5a66ea9-3694-4e11-8ab6-062d3e1d1723%2FUntitled.png?table=block&id=7cd84997-83e1-48b4-a17b-1ff4abc1c2c6&spaceId=685f6a3f-2764-4e53-9986-4bf5be6cc966&width=2000&userId=82de5ecf-35bb-4a26-8c66-75d93c6f930a&cache=v2)
+![Group_215](https://user-images.githubusercontent.com/18710740/135813057-3024d3d4-a540-42b7-8c88-0d9374d83733.png)
 
 
-![Second image](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fbea47066-c36e-4f30-93df-bd8dd4f89183%2FGroup_215.png?table=block&id=7913001b-480c-4a41-80e1-0d6cda3cefac&spaceId=685f6a3f-2764-4e53-9986-4bf5be6cc966&width=1750&userId=82de5ecf-35bb-4a26-8c66-75d93c6f930a&cache=v2)
+![Untitled (1)](https://user-images.githubusercontent.com/18710740/135813302-5be9c32a-35c2-4de7-9aee-e161d64f19ce.png)
 ## Support
 
 For support, just add an issue on the Issues tab.
