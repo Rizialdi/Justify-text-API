@@ -13,7 +13,7 @@ export const generateHashFromPassword = async (
 export const processTextGivenMaxLength = (text: string, maxLength = 80) => {
   const processedArray = sentencesDividerAndSpaceFiller(text, maxLength);
 
-  return processedArray?.join('\n');
+  return processedArray;
 };
 
 const addSpaces = (textLine: string, maxLength = 80): string => {
@@ -35,34 +35,43 @@ const addSpaces = (textLine: string, maxLength = 80): string => {
 const sentencesDividerAndSpaceFiller = (
   text: string,
   maxLength: number
-): string[] => {
-  let currentLine = '';
-  const localNewLinesArray = [];
+): string => {
+    let cmp = 79;
+  let newtext = "";
+  let tempText = "";
 
-  const wordsArray = text.replace(/\s+/g, ' ').trim().split(' ');
+  let j;
+  text = text.replace(/\s\s+/g, " ");
 
-  for (
-    let processedWords = 0;
-    processedWords < wordsArray.length + 1;
-    processedWords++
-  ) {
-    if (!wordsArray.slice(processedWords).length) {
-      localNewLinesArray.push(addSpaces(currentLine));
-      currentLine = '';
-    } else {
-      const currentWord = wordsArray[processedWords];
-      const condition = currentLine.length + currentWord.length;
-
-      if (condition <= maxLength) {
-        currentLine = currentLine.concat(`${currentWord} `);
-      } else if (condition > maxLength) {
-        localNewLinesArray.push(addSpaces(currentLine));
-        currentLine = `${wordsArray[processedWords]} `;
+  for (let i = 0; i < text.length; i++) {
+    tempText += text[i];
+    if (i === cmp) {
+      if (text[i] === " " || text[i] === "," || text[i] === ".") {
+        tempText = addSpaces(tempText, maxLength);
+        newtext += `${tempText} \n`;
+        tempText = "";
+        cmp = i + 1 + maxLength;
+      } else {
+        j = 0;
+        while (text[i] !== " " && text[i] !== "." && text[i] !== ",") {
+          i = i - 1;
+          j++;
+        }
+        tempText = tempText.substr(0, tempText.length - j);
+        tempText = addSpaces(tempText, maxLength);
+        newtext += `${tempText} \n`;
+        tempText = "";
+        cmp = i + maxLength;
       }
+    }
+    if (!text.slice(i + 1).length) {
+      tempText = addSpaces(tempText, maxLength);
+      newtext += `${tempText} \n`;
+      tempText = "";
     }
   }
 
-  return localNewLinesArray;
+  return newtext;
 };
 
 export const removeSensibleInfos = (user: User) => {
