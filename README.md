@@ -2,7 +2,7 @@
 
 Justify text API is a service that help you format and justify your text.
 
-Details on how to use the online demo are provided below. If you want the *IP address*, send us a message.
+Details on how to use the online demo are provided below. If you want the *IP address* to test the API, send us a message.
 
 
 ## Context
